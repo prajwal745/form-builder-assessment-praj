@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Form {
+  id        Int       @id @default(autoincrement())
+  title     String
+  questions Question[]
+  responses Response[]
+}
+
+model Question {
+  id       Int    @id @default(autoincrement())
+  label    String
+  type     String
+  options  String? // For dropdowns (stored as JSON string)
+  formId   Int
+  form     Form    @relation(fields: [formId], references: [id])
+}
+
+model Response {
+  id       Int    @id @default(autoincrement())
+  formId   Int
+  answers  String
+  form     Form   @relation(fields: [formId], references: [id])
+}
